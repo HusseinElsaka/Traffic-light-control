@@ -53,6 +53,5 @@ void APP_init(void);
 */
 void APP_start(void);
 
-void Traffic_states(void);
 
 #endif /* APPLICATION_H_ */
