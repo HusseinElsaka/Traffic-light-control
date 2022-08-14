@@ -25,7 +25,7 @@
  Traffic lights signals are going to the normal mode again.
  
 ## Flow Chart of Program
-![payment-flowchart](https://github.com/HusseinElsaka/Payment-Application/blob/master/payment-flowchart.jpeg?raw=true)
+![Traffic-light-control_flowChart](Traffic-light-control_flowChart.jpg)
 ## Screen Shots  
 [Screen Shots](https://drive.google.com/drive/folders/19iG_4fvZgBkOcayIkSeL51s-4sK8QPTb?usp=sharing)
 ## Screen Records 
