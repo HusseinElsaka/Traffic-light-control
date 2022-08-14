@@ -9,6 +9,7 @@ void APP_init(void)
 	TIMER0_quartSecDelay(&TIMER0_APP);
 	Pedestrian_Button_Init();
 	LED_TRAFFIC_COUNTER = TRAFFIC_CAR_GREEN;
+	TRAFFIC_MODE = TRAFFIC_NORMAL_MODE;
 }
 
 
@@ -73,17 +74,16 @@ ISR(EXT_INT_0)
 			{
 				LED_TRAFFIC_COUNTER = TRAFFIC_CAR_YELLOW_RED;
 				TRAFFIC_MODE = TRAFFIC_PEDESTRAIN_MODE_GREEN;
+				
 				break;
 			}
 			case TRAFFIC_CAR_YELLOW_RED:
 			{
-				TIMER1_Reset();
 				TRAFFIC_MODE = TRAFFIC_PEDESTRAIN_MODE_YELLOW;
 				break;
 			}
 			case TRAFFIC_CAR_RED:
 			{
-				TIMER1_Reset();
 				TRAFFIC_MODE = TRAFFIC_PEDESTRAIN_MODE_RED;
 				break;
 			}
@@ -94,5 +94,7 @@ ISR(EXT_INT_0)
 				break;
 			}
 		}
+		TIMER1_Reset();
+		TIMER0_start(&TIMER0_APP, TIMER0_OVERFLOW);
 	}
 }

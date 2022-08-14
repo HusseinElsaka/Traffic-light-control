@@ -19,7 +19,7 @@
 #define TRAFFIC_CAR_YELLOW_GREEN 3
 
 /* global variables */
-uint8_t TRAFFIC_MODE = TRAFFIC_NORMAL_MODE;
+uint8_t TRAFFIC_MODE;
 uint8_t LED_TRAFFIC_COUNTER;
 
 /* Timer Config */
@@ -53,6 +53,6 @@ void APP_init(void);
 */
 void APP_start(void);
 
-
+void Traffic_states(void);
 
 #endif /* APPLICATION_H_ */
