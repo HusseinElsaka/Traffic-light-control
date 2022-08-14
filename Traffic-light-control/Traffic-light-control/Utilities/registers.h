@@ -41,6 +41,7 @@
 //Timer 1 - 16 bit timer
 #define TCCR1A (*(volatile unsigned char*)0x4F)
 #define TCCR1B (*(volatile unsigned char*)0x4E)
+#define TCNT1 (*(volatile unsigned short*)0x4C)
 #define TCNT1H (*(volatile unsigned char*)0x4D)
 #define TCNT1L (*(volatile unsigned char*)0x4C)
 #define OCR1AH (*(volatile unsigned char*)0x4B)

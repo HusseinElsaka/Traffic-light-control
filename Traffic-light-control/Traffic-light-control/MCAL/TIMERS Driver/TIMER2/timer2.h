@@ -110,8 +110,16 @@ output : ERROR or OK
 extern ERROR_H TIMER2_Get_FlagStatus(Str_Timer2Configuration_t *Config_t, uint8_t *PTR_Flag);
 
 /*
-set TIMER2 flag state
+reset TIMER2 flag state
 Input : Configuration
+output : ERROR or OK
+*/
+extern ERROR_H TIMER2_Flag_Reset(Str_Timer2Configuration_t *Config_t);
+
+
+/*
+reset TIMER2 TCNT2
+Input : Configuration and value to set
 output : ERROR or OK
 */
 extern ERROR_H TIMER2_Reset(Str_Timer2Configuration_t *Config_t);

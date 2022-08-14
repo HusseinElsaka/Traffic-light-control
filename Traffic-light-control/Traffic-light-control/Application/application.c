@@ -1,11 +1,98 @@
 
 #include "application.h"
 
+
 void APP_init(void)
 {
-	LED_init(PORT_A, PIN4);
+	Traffic_LED_Init();
+	TIMER1_5sec(&TIMER1_APP);
+	TIMER0_quartSecDelay(&TIMER0_APP);
+	Pedestrian_Button_Init();
+	LED_TRAFFIC_COUNTER = TRAFFIC_CAR_GREEN;
 }
+
+
 void APP_start(void)
 {
-	LED_blink(PORT_A, PIN4);
+	switch(LED_TRAFFIC_COUNTER)
+	{
+		case TRAFFIC_CAR_GREEN:
+		{
+			Traffic_Car_Move();
+			break;
+		}
+		case TRAFFIC_CAR_YELLOW_RED:
+		break;
+		case TRAFFIC_CAR_RED:
+		{
+			Traffic_Car_Stop();
+			break;
+		}
+		case TRAFFIC_CAR_YELLOW_GREEN:
+		break;
+	}
+}
+
+
+
+
+ISR(TIMER0_OVF)
+{
+	Traffic_Car_Change();
+	TIMER0_Flag_Reset(&TIMER0_APP);
+	TIMER0_Reset();
+}
+
+ISR(TIMER1_COMPA)
+{
+	LED_TRAFFIC_COUNTER++;
+	if (LED_TRAFFIC_COUNTER > TRAFFIC_CAR_YELLOW_GREEN)
+	{
+		LED_TRAFFIC_COUNTER = TRAFFIC_CAR_GREEN;
+	}
+	if(LED_TRAFFIC_COUNTER == TRAFFIC_CAR_YELLOW_GREEN || LED_TRAFFIC_COUNTER == TRAFFIC_CAR_YELLOW_RED)
+	{
+		TIMER0_start(&TIMER0_APP, TIMER0_OVERFLOW);
+	}
+	else
+	{
+		TIMER0_stop();
+	}
+	TRAFFIC_MODE = TRAFFIC_NORMAL_MODE;
+	TIMER1_Flag_Reset(&TIMER1_APP);
+	TIMER1_Reset();
+}
+
+ISR(EXT_INT_0)
+{
+	if(TRAFFIC_MODE == TRAFFIC_NORMAL_MODE)
+	{
+		switch(LED_TRAFFIC_COUNTER)
+		{
+			case TRAFFIC_CAR_GREEN:
+			{
+				LED_TRAFFIC_COUNTER = TRAFFIC_CAR_YELLOW_RED;
+				TRAFFIC_MODE = TRAFFIC_PEDESTRAIN_MODE_GREEN;
+				break;
+			}
+			case TRAFFIC_CAR_YELLOW_RED:
+			{
+				TIMER1_Reset();
+				TRAFFIC_MODE = TRAFFIC_PEDESTRAIN_MODE_YELLOW;
+				break;
+			}
+			case TRAFFIC_CAR_RED:
+			{
+				TIMER1_Reset();
+				TRAFFIC_MODE = TRAFFIC_PEDESTRAIN_MODE_RED;
+				break;
+			}
+			case TRAFFIC_CAR_YELLOW_GREEN:
+			{
+				LED_TRAFFIC_COUNTER = TRAFFIC_CAR_YELLOW_RED;
+				TRAFFIC_MODE = TRAFFIC_PEDESTRAIN_MODE_YELLOW;
+				break;
+			}
+		}
+	}
 }

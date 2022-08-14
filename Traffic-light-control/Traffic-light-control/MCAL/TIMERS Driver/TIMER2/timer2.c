@@ -85,6 +85,9 @@ extern ERROR_H TIMER2_init(Str_Timer2Configuration_t *Config_t)
 			}
 			
 			break;
+			default:
+			return ERROR;
+			break;
 		}
 	}
 	return OK;
@@ -159,6 +162,9 @@ extern ERROR_H TIMER2_start(Str_Timer2Configuration_t *Config_t, uint8_t Ntick)
 		case F_CPU_CLOCK_1024_TIMER_2:
 		TCCR2 |= (1 << CS22) | (1 << CS21) | (1 << CS20);
 		break;
+		default:
+		return ERROR;
+		break;
 	}
 	return OK;
 }
@@ -197,11 +203,11 @@ extern ERROR_H TIMER2_Get_FlagStatus(Str_Timer2Configuration_t *Config_t, uint8_
 }
 
 /*
-set TIMER2 flag state
+reset TIMER2 flag state
 Input : Configuration and value to set
 output : ERROR or OK
 */
-extern ERROR_H TIMER2_Reset(Str_Timer2Configuration_t *Config_t)
+extern ERROR_H TIMER2_Flag_Reset(Str_Timer2Configuration_t *Config_t)
 {
 	if (Config_t->Ticks_Mode == NORMAL_MODE)
 	{
@@ -218,6 +224,18 @@ extern ERROR_H TIMER2_Reset(Str_Timer2Configuration_t *Config_t)
 	return OK;
 }
 
+
+/*
+reset TIMER2 TCNT2
+Input : Configuration and value to set
+output : ERROR or OK
+*/
+extern ERROR_H TIMER2_Reset(Str_Timer2Configuration_t *Config_t)
+{
+	TCNT2 = 0;
+	return OK;
+}
+
 /*
 get TIMER2 Ticktime
 Input : pointer to address to get into the ticktime value
@@ -228,3 +246,4 @@ extern ERROR_H TIMER2_Get_Ticktime(uint8_t *PTR_ticktime)
 	*PTR_ticktime = TCNT2;
 	return OK;
 }
+ 

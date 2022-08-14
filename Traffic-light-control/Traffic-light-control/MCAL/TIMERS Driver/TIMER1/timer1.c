@@ -180,6 +180,9 @@ extern ERROR_H TIMER1_start(Str_Timer1Configuration_t *Config_t, uint32_t Ntick)
 		case F_EXTERNAL_CLOCK_RISING_TIMER_1:
 		TCCR1B |= (1 << CS12) | (1 << CS11) | (1 << CS10);
 		break;
+		default:
+		return ERROR;
+		break;
 	}
 	return OK;
 }
@@ -222,7 +225,7 @@ set TIMER1 flag state
 Input : Configuration and value to set
 output : ERROR or OK
 */
-extern ERROR_H TIMER1_Reset(Str_Timer1Configuration_t *Config_t)
+extern ERROR_H TIMER1_Flag_Reset(Str_Timer1Configuration_t *Config_t)
 {
 	if (Config_t->Ticks_Mode == NORMAL_MODE)
 	{
@@ -251,25 +254,33 @@ extern ERROR_H TIMER1_Get_Ticktime(uint8_t *PTR_ticktime)
 }
 
 /*
-function to generate 5sec using CPU at 1M hz
-input : the timer1 config
-output : make the timer1 configuration for the 5.000192 = (256/10000000)*19,532 so wenn need it as CTC as set OCR = 19,532
+Reset TIMER1 TCNT1
+Input : Configuration
+output : ERROR or OK
 */
-extern ERROR_H TIMER1_5secDelay(Str_Timer1Configuration_t *Config_t)
+extern ERROR_H TIMER1_Reset(void)
 {
-	Config_t->Mode = TIMER_MODE;
-	Config_t->Ticks_Mode = CTC_MODE;
-	Config_t->Timer_Psc = F_CPU_CLOCK_256_TIMER_1;
-	Config_t->Interrupt_Mode = INTERRUPT;
-	Config_t->PWM_Mode = PWM_NORMAL;
+	TCNT1 = 0x0000;
 	return OK;
 }
 
-ISR(TIMER1_COMPA)
+/*
+5 sec configurations to timer1 CTC MODE , INTERRUPT
+INPUT : TIMER Config struct
+OUTPUT: OK- ERROR
+*/
+extern ERROR_H TIMER1_5sec(Str_Timer1Configuration_t *Config_t)
 {
-	LED_COUNTER++;
-	if (LED_COUNTER > 2)
-	{
-		LED_COUNTER = 0;
-	}
+	/*
+	1024/ 1000000 = 0.001024
+	0.001024 * 4883 = 5.000192 sec ~= 5 Sec
+	*/
+	Config_t->Mode = TIMER_MODE;
+	Config_t->Ticks_Mode = CTC_MODE;
+	Config_t->Timer_Psc = F_CPU_CLOCK_1024_TIMER_1;
+	Config_t->Interrupt_Mode = INTERRUPT;
+	TIMER1_init(Config_t);
+	TIMER1_start(Config_t,TIMER1_CTC_5SEC_Ntick);
+	return OK;
 }
+

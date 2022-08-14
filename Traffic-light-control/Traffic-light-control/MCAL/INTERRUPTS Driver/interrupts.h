@@ -83,23 +83,41 @@ void INT_VECT(void)
 #define INT2_PORT PORT_B
 #define INT2_PIN 2
 
-#define INT_FAILING 0
+#define INT_FALLING 0
 #define INT_RISING 1
 
 /* Function Prototypes */
-/* Using this function to enable Interrupt 1
+/* Using this function to enable Interrupt 0
  * INPUT : uint8_t --> FAILING OR RISING
  * RETURN OK OR ERROR OF EXCUTE */
-extern ERROR_H Enable_INT0 (uint8_t INT_STATE);
+ERROR_H Enable_INT0 (uint8_t INT_STATE);
+
+/* Function Prototypes */
+/* Using this function to Disable Interrupt 0
+ * INPUT : --
+ * RETURN OK OR ERROR OF EXCUTE */
+ERROR_H Disable_INT0 ();
 
 /* Using this function to enable Interrupt 1
  * INPUT : uint8_t --> FAILING OR RISING
  * RETURN OK OR ERROR OF EXCUTE */
-extern ERROR_H Enable_INT1 (uint8_t INT_STATE);
+ERROR_H Enable_INT1 (uint8_t INT_STATE);
 
-/* Using this function to enable Interrupt 1
+/* Function Prototypes */
+/* Using this function to Disable Interrupt 1
+ * INPUT : --
+ * RETURN OK OR ERROR OF EXCUTE */
+ERROR_H Disable_INT1 ();
+
+/* Using this function to enable Interrupt 2
  * INPUT : uint8_t --> FAILING OR RISING
  * RETURN OK OR ERROR OF EXCUTE */
-extern ERROR_H Enable_INT2 (uint8_t INT_STATE);
+ERROR_H Enable_INT2 (uint8_t INT_STATE);
+
+/* Function Prototypes */
+/* Using this function to Disable Interrupt 2
+ * INPUT : --
+ * RETURN OK OR ERROR OF EXCUTE */
+ERROR_H Disable_INT2 ();
 
 #endif /* INTERRUPTS_H_ */

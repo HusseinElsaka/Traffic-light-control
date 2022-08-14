@@ -1,0 +1,91 @@
+#include "led.h"
+
+
+ERROR_H LED_init(uint8_t ledPort, uint8_t ledPin)
+{
+	if(DIO_init(ledPort, ledPin, OUT) == 0)
+	{
+		return OK;
+	}
+	return ERROR;
+}
+
+ERROR_H LED_on(uint8_t ledPort, uint8_t ledPin)
+{
+	if(DIO_write(ledPort,ledPin,HIGH) == 0)
+	{
+		return OK;
+	}
+	return ERROR;
+}
+
+ERROR_H LED_off(uint8_t ledPort, uint8_t ledPin)
+{
+	if(DIO_write(ledPort,ledPin,LOW) == 0)
+	{
+		return OK;
+	}
+	return ERROR;
+	
+}
+
+ERROR_H LED_blink(uint8_t ledPort, uint8_t ledPin)
+{
+	if(DIO_toggle(ledPort,ledPin) == 0)
+	{
+		return OK;
+	}
+	return ERROR;
+}
+
+
+ERROR_H Traffic_LED_Init(void)
+{
+	LED_init(TRAFFIC_PORT,TRAFFIC_RED_LED_PIN);
+	LED_init(TRAFFIC_PORT,TRAFFIC_GREEN_LED_PIN);
+	LED_init(TRAFFIC_PORT,TRAFFIC_YELLOW_LED_PIN);
+	LED_init(PEDESTRIAN_PORT,PEDESTRIAN_RED_LED_PIN);
+	LED_init(PEDESTRIAN_PORT,PEDESTRIAN_YELLOW_LED_PIN);
+	LED_init(PEDESTRIAN_PORT,PEDESTRIAN_GREEN_LED_PIN);
+	return OK;
+}
+
+ERROR_H Traffic_Car_Move(void)
+{
+	LED_on(TRAFFIC_PORT, TRAFFIC_GREEN_LED_PIN);
+	LED_off(TRAFFIC_PORT, TRAFFIC_RED_LED_PIN);
+	LED_off(TRAFFIC_PORT, TRAFFIC_YELLOW_LED_PIN);
+	
+	LED_on(PEDESTRIAN_PORT, PEDESTRIAN_RED_LED_PIN);
+	LED_off(PEDESTRIAN_PORT, PEDESTRIAN_GREEN_LED_PIN);
+	LED_off(PEDESTRIAN_PORT, PEDESTRIAN_YELLOW_LED_PIN);
+	
+	return OK;
+}
+
+ERROR_H Traffic_Car_Stop(void)
+{
+	LED_on(TRAFFIC_PORT, TRAFFIC_RED_LED_PIN);
+	LED_off(TRAFFIC_PORT, TRAFFIC_GREEN_LED_PIN);
+	LED_off(TRAFFIC_PORT, TRAFFIC_YELLOW_LED_PIN);
+	
+	LED_on(PEDESTRIAN_PORT, PEDESTRIAN_GREEN_LED_PIN);
+	LED_off(PEDESTRIAN_PORT, PEDESTRIAN_RED_LED_PIN);
+	LED_off(PEDESTRIAN_PORT, PEDESTRIAN_YELLOW_LED_PIN);
+	
+	return OK;
+}
+
+ERROR_H Traffic_Car_Change(void)
+{
+	LED_blink(TRAFFIC_PORT, TRAFFIC_YELLOW_LED_PIN);
+	LED_off(TRAFFIC_PORT, TRAFFIC_RED_LED_PIN);
+	LED_off(TRAFFIC_PORT, TRAFFIC_GREEN_LED_PIN);
+	
+	LED_blink(PEDESTRIAN_PORT, PEDESTRIAN_YELLOW_LED_PIN);
+	LED_off(PEDESTRIAN_PORT, PEDESTRIAN_RED_LED_PIN);
+	LED_off(PEDESTRIAN_PORT, PEDESTRIAN_GREEN_LED_PIN);
+	
+	return OK;
+}
+

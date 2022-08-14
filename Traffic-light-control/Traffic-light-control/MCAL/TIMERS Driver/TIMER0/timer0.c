@@ -85,6 +85,9 @@ extern ERROR_H TIMER0_init(Str_Timer0Configuration_t *Config_t)
 			}
 			
 			break;
+			default:
+			return ERROR;
+			break;
 		}
 	}
 	return OK;
@@ -159,6 +162,10 @@ extern ERROR_H TIMER0_start(Str_Timer0Configuration_t *Config_t, uint8_t Ntick)
 		case F_EXTERNAL_CLOCK_RISING_TIMER_0:
 		TCCR0 |= (1 << CS02) | (1 << CS01) | (1 << CS00);
 		break;
+		default:
+		return ERROR;
+		break;
+		
 	}
 	return OK;
 }
@@ -197,11 +204,11 @@ extern ERROR_H TIMER0_Get_FlagStatus(Str_Timer0Configuration_t *Config_t, uint8_
 }
 
 /*
-set TIMER0 flag state
+reset TIMER0 flag state
 Input : Configuration and value to set
 output : ERROR or OK
 */
-extern ERROR_H TIMER0_Reset(Str_Timer0Configuration_t *Config_t)
+extern ERROR_H TIMER0_Flag_Reset(Str_Timer0Configuration_t *Config_t)
 {
 	if (Config_t->Ticks_Mode == NORMAL_MODE)
 	{
@@ -230,7 +237,18 @@ extern ERROR_H TIMER0_Get_Ticktime(uint8_t *PTR_ticktime)
 }
 
 /*
-function to generate 0.26112 sec using CPU at 1M hz
+Reset TIMER0 TCNT0
+Input : Configuration
+output : ERROR or OK
+*/
+extern ERROR_H TIMER0_Reset(void)
+{
+	TCNT0 = 0x00;
+	return OK;
+}
+
+/*
+function to generate 0.26112 sec using CPU at 1M hz 
 input : the timer0 config
 output : make the timer0 configuration for the 0.25112 = (1024/10000000)*255 so wenn need it as overflow
 */
@@ -239,7 +257,8 @@ extern ERROR_H TIMER0_quartSecDelay(Str_Timer0Configuration_t *Config_t)
 	Config_t->Mode = TIMER_MODE;
 	Config_t->Ticks_Mode = NORMAL_MODE;
 	Config_t->Timer_Psc = F_CPU_CLOCK_1024_TIMER_0;
-	Config_t->Interrupt_Mode = POLLING;
-	Config_t->PWM_Mode = PWM_NORMAL;
+	Config_t->Interrupt_Mode = INTERRUPT;
+	TIMER0_init(Config_t);
+	
 	return OK;
 }

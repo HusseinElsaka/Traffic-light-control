@@ -94,9 +94,9 @@ typedef struct
 #define INVERTED 1
 
 #define TIMER1_OVERFLOW 65536
-#define TIMER1_CTC_5SEC_Ntick 19,532
+#define TIMER1_CTC_5SEC_Ntick 4883
 
-uint8_t LED_COUNTER = 0;
+
 /*
 initial TIMER1 with its configurations
 Input : Configuration
@@ -126,11 +126,18 @@ output : ERROR or OK
 extern ERROR_H TIMER1_Get_FlagStatus(Str_Timer1Configuration_t *Config_t, uint8_t *PTR_Flag);
 
 /*
-set TIMER1 flag state
+Reset TIMER1 flag state
 Input : Configuration 
 output : ERROR or OK
 */
-extern ERROR_H TIMER1_Reset(Str_Timer1Configuration_t *Config_t);
+extern ERROR_H TIMER1_Flag_Reset(Str_Timer1Configuration_t *Config_t);
+
+/*
+Reset TIMER1 TCNT1
+Input : Configuration
+output : ERROR or OK
+*/
+extern ERROR_H TIMER1_Reset(void);
 
 /*
 get TIMER1 Ticktime
@@ -138,6 +145,14 @@ Input : pointer to address to get into the ticktime value
 output : ERROR or OK
 */
 extern ERROR_H TIMER1_Get_Ticktime(uint8_t *PTR_ticktime);
+
+/*
+5 sec configurations to timer1 CTC MODE , INTERRUPT
+INPUT : TIMER Config struct
+OUTPUT: OK- ERROR
+*/
+extern ERROR_H TIMER1_5sec(Str_Timer1Configuration_t *Config_t);
+
 
 
 

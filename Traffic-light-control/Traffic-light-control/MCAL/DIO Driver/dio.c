@@ -19,6 +19,9 @@ ERROR_H DIO_init(uint8_t portNumber, uint8_t pinNumber, uint8_t direction) // In
 			case PORT_D:
 			DDRD |= (1 << pinNumber);
 			break;
+			default:
+			return ERROR;
+			break;
 		}
 	}
 	else if(direction == IN)
@@ -36,6 +39,9 @@ ERROR_H DIO_init(uint8_t portNumber, uint8_t pinNumber, uint8_t direction) // In
 			break;
 			case PORT_D:
 			DDRD &= ~(1 << pinNumber);
+			break;
+			default:
+			return ERROR;
 			break;
 		}
 	}
@@ -64,6 +70,9 @@ ERROR_H DIO_write(uint8_t portNumber, uint8_t pinNumber, uint8_t value) // Write
 			case PORT_D:
 			PORTD |= (1 << pinNumber);
 			break;
+			default:
+			return ERROR;
+			break;
 		}
 	}
 	else if(value == LOW)
@@ -81,6 +90,9 @@ ERROR_H DIO_write(uint8_t portNumber, uint8_t pinNumber, uint8_t value) // Write
 			break;
 			case PORT_D:
 			PORTD &= ~(1 << pinNumber);
+			break;
+			default:
+			return ERROR;
 			break;
 		}
 	}
@@ -108,6 +120,9 @@ ERROR_H DIO_toggle(uint8_t portNumber, uint8_t pinNumber) // toggle data
 		case PORT_D:
 			TOGGLE_BIT(PORTD, pinNumber);
 			break;
+		default:
+		return ERROR;
+		break;
 	}
 	return OK;
 }
@@ -117,17 +132,20 @@ ERROR_H DIO_read(uint8_t portNumber, uint8_t pinNumber, uint8_t *value) //read d
 	switch(portNumber)
 	{
 		case PORT_A:
-			*value = GET_BIT(PORTA, pinNumber);
+			*value = GET_BIT(PINA, pinNumber);
 			break;
 		case PORT_B:
-			*value = GET_BIT(PORTB, pinNumber);
+			*value = GET_BIT(PINB, pinNumber);
 			break;
 		case PORT_C:
-			*value = GET_BIT(PORTC, pinNumber);
+			*value = GET_BIT(PINC, pinNumber);
 			break;
 		case PORT_D:
-			*value = GET_BIT(PORTD, pinNumber);
+			*value = GET_BIT(PIND, pinNumber);
 			break;
+		default:
+		return ERROR;
+		break;
 	}
 	return OK;
 }
@@ -135,46 +153,24 @@ ERROR_H DIO_read(uint8_t portNumber, uint8_t pinNumber, uint8_t *value) //read d
 
 ERROR_H DIO_Port_Write(uint8_t portNumber, uint8_t value)
 {
-	if (value == HIGH)
-	{
 		switch(portNumber)
 		{
 			case PORT_A:
-			PORTA = 0xff;
+			PORTA = value;
 			break;
 			case PORT_B:
-			PORTB = 0xff;
+			PORTB = value;
 			break;
 			case PORT_C:
-			PORTC = 0xff;
+			PORTC = value;
 			break;
 			case PORT_D:
-			PORTD = 0xff;
+			PORTD = value;
+			break;
+			default:
+			return ERROR;
 			break;
 		}
-	}
-	else if (value ==  LOW)
-	{
-		switch(portNumber)
-		{
-			case PORT_A:
-			PORTA = 0x00;
-			break;
-			case PORT_B:
-			PORTB = 0x00;
-			break;
-			case PORT_C:
-			PORTC = 0x00;
-			break;
-			case PORT_D:
-			PORTD = 0x00;
-			break;
-		}
-	}
-	else
-	{
-		return ERROR;
-	}
 	return OK;
 }
 
@@ -194,6 +190,9 @@ ERROR_H DIO_Port_Read(uint8_t portNumber, uint8_t *value)
 		break;
 		case PORT_D:
 		*value = PIND;
+		break;
+		default:
+		return ERROR;
 		break;
 	}
 	return OK;
@@ -218,6 +217,9 @@ ERROR_H DIO_Port_Direction(uint8_t portNumber, uint8_t direction)
 			case PORT_D:
 			DDRD = 0xff;
 			break;
+			default:
+			return ERROR;
+			break;
 		}
 	}
 	else if (direction == IN)
@@ -235,6 +237,9 @@ ERROR_H DIO_Port_Direction(uint8_t portNumber, uint8_t direction)
 			break;
 			case PORT_D:
 			DDRD = 0x00;
+			break;
+			default:
+			return ERROR;
 			break;
 		}
 	}

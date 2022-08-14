@@ -111,11 +111,19 @@ output : ERROR or OK
 extern ERROR_H TIMER0_Get_FlagStatus(Str_Timer0Configuration_t *Config_t, uint8_t *PTR_Flag);
 
 /*
-set TIMER0 flag state
+Reset TIMER0 flag 
 Input : Configuration
 output : ERROR or OK
 */
-extern ERROR_H TIMER0_Reset(Str_Timer0Configuration_t *Config_t);
+extern ERROR_H TIMER0_Flag_Reset(Str_Timer0Configuration_t *Config_t);
+
+/*
+Reset TIMER0 TCNT0
+Input : Configuration
+output : ERROR or OK
+*/
+extern ERROR_H TIMER0_Reset(void);
+
 
 /*
 get TIMER0 Ticktime
