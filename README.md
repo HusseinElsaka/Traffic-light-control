@@ -1,4 +1,4 @@
- #Traffic-light-control
+ # Traffic-light-control
  Traffic lights are signaling devices positioned at road intersections, pedestrian crossings, and other locations to control the flow of traffic.  
  Traffic lights normally consist of three signals, transmitting meaning to drivers and riders through colors and symbols including arrows and bicycles.
  The regular traffic light colors are red, yellow, and green arranged vertically or horizontally in that order.  
